@@ -28,3 +28,18 @@ info:
   build-timestamp: @maven.build.timestamp@
 server:
   port: 8077
+cloud:
+  aws:
+    credentials:
+      access-key: pass
+      secret-key: pass
+    region:
+      static: eu-central-1
+    stack:
+      auto: false
+      enabled:
+aws:
+  s3:
+    bucket: image-bucket
+  sqs:
+    device-order-queue: device-order-queue
