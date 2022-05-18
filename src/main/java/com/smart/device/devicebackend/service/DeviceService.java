@@ -36,7 +36,7 @@ public class DeviceService {
 
     public Device updateDevice(Device device) {
         return deviceRepository.findById(device.id())
-                .map(deviceRepository::save)
+                .map(val -> deviceRepository.save(device))
                 .orElseThrow(() -> new ResourceNotFound(device.id()));
     }
 

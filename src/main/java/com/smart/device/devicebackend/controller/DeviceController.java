@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1")
+@RequestMapping(path = "/api/v1/device")
 public class DeviceController {
     private DeviceService deviceService;
     private Counter hitCounter;
@@ -22,30 +22,30 @@ public class DeviceController {
         this.deviceService = deviceService;
     }
 
-    @PostMapping("/device")
+    @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public Device createDevice(@RequestBody Device device) {
         return deviceService.createDevice(device);
     }
 
-    @PutMapping("/device/{deviceUid}")
+    @PutMapping("/{deviceUid}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public Device updateDevice(@PathVariable String deviceUid, @RequestBody Device device) {
         return deviceService.updateDevice(device);
     }
 
-    @GetMapping("/device/all")
+    @GetMapping("/all")
     public List<Device> getAllDevice() {
         return deviceService.getAllDevices();
     }
 
-    @GetMapping("/device/{id}")
+    @GetMapping("/{id}")
     public Device findDeviceById(@PathVariable String id){
 //        hitCounter.increment();
         return deviceService.findDeviceById(id);
     }
 
-    @DeleteMapping("/device/{id}")
+    @DeleteMapping("/{id}")
     public void deleteDevice(@PathVariable String id) {
         deviceService.deleteDevice(id);
     }
