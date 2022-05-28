@@ -19,7 +19,7 @@ public class DeviceControllerAdvice {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMessage> globalExceptionHandler(ResourceNotFound ex, WebRequest request) {
+    public ResponseEntity<ErrorMessage> globalExceptionHandler(Exception ex, WebRequest request) {
         return new ResponseEntity<>(new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), Instant.now(), ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

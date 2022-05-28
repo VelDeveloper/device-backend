@@ -1,26 +1,28 @@
 package com.smart.device.devicebackend.controller;
 
+import com.smart.device.devicebackend.configuration.AWSConfigProperties;
 import com.smart.device.devicebackend.model.DeviceOrderEvent;
 import com.smart.device.devicebackend.service.AwsSQSProducer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/v1/sqs")
+@RestController
+@RequestMapping(value = "/api/v1/sqs")
 @AllArgsConstructor
 @Slf4j
 public class AwsSQSController {
 
-    private AwsSQSProducer awsSQSProducer;
+    private QueueMessagingTemplate queueMessagingTemplate;
+    private AWSConfigProperties awsConfigProperties;
 
-    @PostMapping("/publish/device/order/event")
+    @PostMapping(value = "/publish/device/order/event", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public void publishDeviceOrderEvent(@RequestBody DeviceOrderEvent deviceOrderEvent) {
         log.debug("publish order event {}", deviceOrderEvent);
-        awsSQSProducer.publishDeviceOrderEvent(deviceOrderEvent);
+        queueMessagingTemplate.convertAndSend(awsConfigProperties.sqs().deviceOrderQueue(), deviceOrderEvent);
     }
 }

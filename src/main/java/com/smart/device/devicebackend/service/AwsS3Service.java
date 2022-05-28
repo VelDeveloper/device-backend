@@ -1,8 +1,10 @@
 package com.smart.device.devicebackend.service;
 
+import com.smart.device.devicebackend.configuration.AWSConfigProperties;
 import com.smart.device.devicebackend.exception.ServiceException;
 import com.smart.device.devicebackend.model.Image;
 import com.smart.device.devicebackend.repository.ImageRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,14 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class AwsS3Service {
 
     private S3Client s3Client;
+    private AWSConfigProperties awsConfigProperties;
     private ImageRepository imageRepository;
 
-    public Image upload(String imageName, String description, MultipartFile file) {
+    public Image upload(String imageName, String imageId, String description, MultipartFile file) {
         try {
             log.info("Uploading a file to s3. ImageName: {}, Description: {}", imageName, description);
             if (file.isEmpty()) {
@@ -33,8 +37,8 @@ public class AwsS3Service {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .contentType(file.getContentType())
                     .contentLength(file.getSize())
-                    .bucket("dev-device-backend")
-                    .key(file.getOriginalFilename())
+                    .bucket(awsConfigProperties.s3().bucket())
+                    .key(imageId)
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
             Image image = new Image(ObjectId.get().toHexString(), imageName, description, file.getOriginalFilename());
@@ -61,7 +65,7 @@ public class AwsS3Service {
         try {
             log.info("Retrieving file from S3 for key: {}", keyName);
             ResponseBytes<GetObjectResponse> s3Object = s3Client.getObject(
-                    GetObjectRequest.builder().bucket("dev-device-backend").key(keyName).build(),
+                    GetObjectRequest.builder().bucket(awsConfigProperties.s3().bucket()).key(keyName).build(),
                     ResponseTransformer.toBytes());
             return s3Object.asByteArray();
         } catch (SdkClientException ase) {

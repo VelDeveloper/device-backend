@@ -2,6 +2,7 @@ package com.smart.device.devicebackend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.smart.device.devicebackend.BaseTest;
 import com.smart.device.devicebackend.RecordFactory;
 import com.smart.device.devicebackend.exception.ResourceNotFound;
 import com.smart.device.devicebackend.model.Device;
@@ -31,7 +32,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = DeviceController.class)
 public class DeviceControllerTest {
 

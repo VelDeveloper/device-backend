@@ -10,11 +10,6 @@ spring:
     mongodb:
       database: device
       auto-index-creation: true
-  lifecycle:
-    timeout-per-shutdown-phase: 10s
-  config:
-    activate:
-      on-cloud-platform: kubernetes
 #  security:
 #    user:
 #      name: admin
@@ -38,21 +33,25 @@ info:
   build-timestamp: @maven.build.timestamp@
 server:
   port: 8077
-  shutdown: graceful
 cloud:
   aws:
     credentials:
-      access-key: pass
-      secret-key: pass
+      access-key: localstack
+      secret-key: localstack
     region:
       static: eu-central-1
     stack:
       auto: false
 aws:
-  access-key: pass
-  secret-key: pass
-  region: eu-central-1
+  endpoint: "http://localhost:4566"
+  access-key: localstack
+  secret-key: localstack
+  region: us-east-1
   s3:
     bucket: image-bucket
   sqs:
     device-order-queue: device-order-queue
+logging:
+  level:
+    org.springframework.data.convert.CustomConversions: ERROR
+

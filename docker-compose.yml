@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:4.4.3
+    ports:
+      - "27017:27017"
+    command: mongod --quiet
+  device-backend:
+    build: .
+    image: device-backend
+    ports:
+      - "8077:8077"
+    depends_on:
+      - mongodb

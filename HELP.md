@@ -1,5 +1,36 @@
 # Getting Started
 
+## Localstack configuration
+----------------------------
+```YML
+version: "3.8"
+
+services:
+  localstack:
+    container_name: "localstack"
+    image: localstack/localstack
+    network_mode: bridge
+    ports:
+      - "127.0.0.1:4510:4510"  # external service port range
+      - "127.0.0.1:4511:4511"  # external service port range
+      - "127.0.0.1:4566:4566"            # LocalStack Edge Proxy
+    environment:
+      - SERVICES=s3:4510,sqs:4511
+      - DEBUG=1
+      - DATA_DIR=${DATA_DIR-}
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-}
+      - HOST_TMP_FOLDER=${TMPDIR:-/tmp/}localstack
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${TMPDIR:-/tmp}/localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+```
+## Build docker image
+----------------------
+* `mvn spring-boot:build-image`
+* `dive docker.io/vadivel1987/device-backend:v1`
+* `docker history <imageName>`
+
 ## Prometheus Configuration
 ------------------------
 * Step 1: `docker pull prom/prometheus`

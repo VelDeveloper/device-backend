@@ -1,6 +1,7 @@
 package com.smart.device.devicebackend.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.smart.device.devicebackend.BaseTest;
 import com.smart.device.devicebackend.model.Device;
 import com.smart.device.devicebackend.repository.DeviceRepository;
 import org.junit.jupiter.api.*;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.spec.internal.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,27 +23,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-@Testcontainers
-@SpringBootTest
-public class DeviceControllerIntegrationTest {
+@ActiveProfiles("test")
+public class DeviceControllerIntegrationTest extends BaseTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private DeviceRepository deviceRepository;
-    @Container
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.3");
-
-    @DynamicPropertySource
-    static void setProperties(final DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
-
-    @BeforeAll
-    static void init() {
-        mongoDBContainer.start();
-    }
+//    @Container
+//    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.3");
+//
+//    @DynamicPropertySource
+//    static void setProperties(final DynamicPropertyRegistry registry) {
+//        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+//    }
+//
+//    @BeforeAll
+//    static void init() {
+//        mongoDBContainer.start();
+//    }
 
     @BeforeEach
     void initialize() {
