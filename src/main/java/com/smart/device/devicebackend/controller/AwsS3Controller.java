@@ -20,7 +20,7 @@ public class AwsS3Controller {
     private AwsS3Service awsS3Service;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<Image> createDevice(@RequestParam String imageName,
                                               @RequestParam String imageId,
                                               @RequestParam String description,
@@ -30,7 +30,7 @@ public class AwsS3Controller {
     }
 
     @GetMapping(value = "/image/download/{id}", produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<byte[]> createDevice(@PathVariable String id) {
         return ResponseEntity.ok(awsS3Service.download(id));
     }

@@ -1,49 +1,34 @@
 package com.smart.device.devicebackend.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smart.device.devicebackend.BaseTest;
+import com.smart.device.devicebackend.AbstractIntegrationTest;
 import com.smart.device.devicebackend.model.Device;
 import com.smart.device.devicebackend.repository.DeviceRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.spec.internal.MediaTypes;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
+
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
-public class DeviceControllerIntegrationTest extends BaseTest {
+@Import(AbstractIntegrationTest.AwsTestConfig.class)
+public class DeviceControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private DeviceRepository deviceRepository;
-//    @Container
-//    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.3");
-//
-//    @DynamicPropertySource
-//    static void setProperties(final DynamicPropertyRegistry registry) {
-//        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-//    }
-//
-//    @BeforeAll
-//    static void init() {
-//        mongoDBContainer.start();
-//    }
-
     @BeforeEach
     void initialize() {
         this.deviceRepository.save(new Device("1", "samsung","samsung", "hardwareUid","productId",false,"customerId"));
